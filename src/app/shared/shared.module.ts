@@ -20,10 +20,6 @@ import { TabContentComponent } from './components/tabs/tab/tab-content/tab-conte
   ],
   imports: [
     CommonModule
-  ],
-  entryComponents: [
-    TabTitleComponent,
-    TabContentComponent
   ]
 })
 export class SharedModule { }

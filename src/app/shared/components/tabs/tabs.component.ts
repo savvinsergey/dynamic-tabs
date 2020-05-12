@@ -1,10 +1,10 @@
 import {
-  AfterContentChecked,
-  AfterContentInit, AfterViewChecked,
+  AfterContentInit,
   AfterViewInit,
   Component,
   ContentChildren,
-  EventEmitter, OnDestroy,
+  EventEmitter,
+  OnDestroy,
   OnInit,
   Output,
   QueryList, ViewChild,
@@ -12,8 +12,6 @@ import {
   ViewContainerRef
 } from '@angular/core';
 import {TabComponent} from './tab/tab.component';
-import {TabTitleComponent} from './tab/tab-title/tab-title.component';
-import {TabContentComponent} from './tab/tab-content/tab-content.component';
 import {Subscription} from 'rxjs';
 
 @Component({
