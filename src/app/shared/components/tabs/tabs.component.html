@@ -2,21 +2,13 @@
   <div class="tabs__titles">
     <button class="tabs__title" *ngFor="let tab of tabs; let idx = index"
             [class.tabs__title--active]="tab.isActive"
-            (click)="onActivate(tab, idx)" >
-      <ng-container
-        *ngComponentOutlet="tabTitleComponent; content: [[tab.title.innerContent]]">
-      </ng-container>
+            (click)="onActivate(tab, idx)">
+      <ng-container #titleCmpContainer></ng-container>
     </button>
   </div>
 
   <div class="tabs__contents">
-    <ng-container *ngFor="let tab of tabs">
-      <ng-container *ngIf="tab.isActive && tab.content">
-        <ng-container
-          *ngComponentOutlet="tabContentComponent; content: [[tab.content.innerContent]]">
-        </ng-container>
-      </ng-container>
-    </ng-container>
+      <ng-container #contentCmpContainer></ng-container>
   </div>
 </div>
 

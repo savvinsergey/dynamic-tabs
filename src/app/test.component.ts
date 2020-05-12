@@ -4,7 +4,7 @@ import {Component, Input, OnInit} from '@angular/core';
   selector: 'test',
   template:  `
     <div>
-      TestComponent {{ this.tab.title }} content
+      <button (click)="onClick()">TestComponent {{ this.tab.title }} content</button>
     </div>
   `,
 })
@@ -14,5 +14,9 @@ export class TestComponent implements OnInit {
 
   public ngOnInit() {
     console.log(`>>> TestComponent '${this.tab.title}' initialized`);
+  }
+
+  onClick() {
+    console.log(`>>> Click to tab '${this.tab.title}'`);
   }
 }
