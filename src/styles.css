@@ -1,0 +1,15 @@
+/* You can add global styles to this file, and also import other style files */
+.tabs__titles {
+  flex: 1 1 0;
+  flex-direction: row;
+  margin-bottom: 10px;
+}
+.tabs__title {
+  display: inline-block;
+  margin: 5px;
+  padding: 5px;
+  cursor: pointer;
+}
+.tabs__title--active {
+  border-bottom: 2px solid #ff2222;
+}

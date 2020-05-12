@@ -1,0 +1,22 @@
+<button (click)="onRemoveTab()">
+  Remove tab
+</button>
+<button (click)="onAddTab()">
+  Add tab
+</button>
+
+<br>
+
+<tabs (activated)="activatedTabIndex = $event">
+  <tab *ngFor="let tab of tabs; let idx = index">
+    <tab-title>
+      {{tab.title}}
+    </tab-title>
+
+    <tab-content *ngIf="activatedTabIndex === idx">
+      {{tab.content}}
+      <div>TEST</div>
+      <test [tab]="tab"></test>
+    </tab-content>
+  </tab>
+</tabs>

@@ -1,0 +1,7 @@
+.tabs {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  margin-bottom: 10px;
+  position: relative;
+}
