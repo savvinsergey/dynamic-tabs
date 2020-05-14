@@ -4,7 +4,8 @@ import {Component, Input, OnInit} from '@angular/core';
   selector: 'test',
   template:  `
     <div>
-      <button (click)="onClick()">TestComponent {{ this.tab.title }} content</button>
+      TestComponent '{{ this.tab.title }}' content <br/>
+      <button (click)="onClick()">Check event for tab => {{this.tab.title}}</button>
     </div>
   `,
 })

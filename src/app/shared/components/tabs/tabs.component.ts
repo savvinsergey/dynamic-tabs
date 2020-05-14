@@ -1,6 +1,6 @@
 import {
   AfterContentInit,
-  AfterViewInit,
+  AfterViewChecked, ChangeDetectorRef,
   Component,
   ContentChildren,
   EventEmitter,
@@ -19,7 +19,7 @@ import {Subscription} from 'rxjs';
   templateUrl: './tabs.component.html',
   styleUrls: ['./tabs.component.css'],
 })
-export class TabsComponent implements OnInit, AfterContentInit, AfterViewInit, OnDestroy {
+export class TabsComponent implements AfterContentInit, AfterViewChecked, OnDestroy {
 
   @ContentChildren(TabComponent) tabs: QueryList<TabComponent>;
 
@@ -28,31 +28,41 @@ export class TabsComponent implements OnInit, AfterContentInit, AfterViewInit, O
 
   @Output() activated = new EventEmitter<number>();
 
+  private _needRenderTitles = true;
+  private _needRenderContent = true;
+
   private _subscription: Subscription = null;
 
-  ngOnInit() {
-    this.activated.emit(0);
-  }
+  constructor(private ref: ChangeDetectorRef){}
 
   ngAfterContentInit() {
     if (!this.tabs.length) {
       return;
     }
 
-    this.tabs.first.isActive = true;
+    this.onActivate(this.tabs.first, 0);
 
     this._subscription = this.tabs.changes
       .subscribe(() => {
+        if (!this.tabs.length) {
+          this.contentContainer.clear();
+          return;
+        }
+
         this._checkActiveTab();
-        setTimeout(() => {
-          this._renderTitlesToContainers();
-        });
+
+        this._needRenderTitles = this.tabs.length > this.titleContainers.length;
       });
   }
 
-  ngAfterViewInit() {
-    this._renderTitlesToContainers();
-    this._renderContentToContainer();
+  ngAfterViewChecked() {
+    if (this._needRenderTitles) {
+      this._renderTitlesToContainers();
+    }
+
+    if (this._needRenderContent) {
+      this._renderContentToContainer();
+    }
   }
 
   ngOnDestroy() {
@@ -62,10 +72,12 @@ export class TabsComponent implements OnInit, AfterContentInit, AfterViewInit, O
   onActivate(tab: TabComponent, index: number): void {
     this._deactivateAllTabs();
 
-    tab.isActive = true;
-    this.activated.emit(index);
+    setTimeout(() => {
+      this.activated.emit(index);
+      tab.isActive = true;
 
-    this._renderContentToContainer();
+      this._needRenderContent = true;
+    });
   }
 
   private _deactivateAllTabs(): void {
@@ -73,21 +85,12 @@ export class TabsComponent implements OnInit, AfterContentInit, AfterViewInit, O
   }
 
   private _checkActiveTab(): void {
-    if (!this.tabs.length) {
-      this._renderContentToContainer();
-      return;
-    }
-
     const noActiveTab = this.tabs
       .toArray()
       .every(tab => !tab.isActive);
 
     if (noActiveTab) {
-      this.tabs.first.isActive = true;
-      setTimeout(() => {
-        this.activated.emit(0);
-        this._renderContentToContainer();
-      });
+      this.onActivate(this.tabs.first, 0);
     }
   }
 
@@ -98,6 +101,8 @@ export class TabsComponent implements OnInit, AfterContentInit, AfterViewInit, O
         titlesContainers[index].clear();
         titlesContainers[index].createEmbeddedView(tab.titleTemplateRef);
       });
+
+    this._needRenderTitles = false;
   }
 
   private _renderContentToContainer(): void {
@@ -108,5 +113,7 @@ export class TabsComponent implements OnInit, AfterContentInit, AfterViewInit, O
           this.contentContainer.createEmbeddedView(tab.contentTemplateRef);
         }
       });
+
+    this._needRenderContent = false;
   }
 }
